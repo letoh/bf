@@ -41,10 +41,6 @@ jmp value jptr
 	jptr 4 - @ to iptr
 ;
 
-: drop-ret-addr ( -- )
-	jptr 4 - to jptr
-;
-
 : jump-forward ( -- )
 	1 \ to find matched ], start from 1 and stop at 0
 	iram imax + iptr 1+ do
