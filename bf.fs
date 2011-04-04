@@ -53,7 +53,7 @@ jmp value jptr
 	[char] - of dptr dup c@ 1- swap c! endof
 	[char] . of dptr c@ emit endof
 	[char] , of key dptr c! endof
-	[char] [ of dptr c@ 0 <> if save-iptr then endof
+	[char] [ of save-iptr endof
 	[char] ] of dptr c@ 0 <> if restore-iptr else drop-ret-addr then endof
 	endcase
 ;
