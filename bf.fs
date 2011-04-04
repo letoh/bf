@@ -45,6 +45,17 @@ jmp value jptr
 	jptr 4 - to jptr
 ;
 
+: jump-forward ( -- )
+	1 \ to find matched ], start from 1 and stop at 0
+	iram imax + iptr 1+ do
+		i c@ case
+		[char] [ of 1+ endof
+		[char] ] of 1- endof
+		endcase
+		dup 0= if i to iptr leave then
+	loop drop
+;
+
 : parse-and-exec ( ch -- )
 	case
 	[char] < of dptr 1- to dptr endof
@@ -53,8 +64,8 @@ jmp value jptr
 	[char] - of dptr dup c@ 1- swap c! endof
 	[char] . of dptr c@ emit endof
 	[char] , of key dptr c! endof
-	[char] [ of save-iptr endof
-	[char] ] of dptr c@ 0 <> if restore-iptr else drop-ret-addr then endof
+	[char] [ of dptr c@ if save-iptr else jump-forward then endof
+	[char] ] of dptr c@ if restore-iptr then endof
 	endcase
 ;
 
