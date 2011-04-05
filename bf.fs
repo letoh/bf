@@ -2,7 +2,9 @@
 \ 
 \ author: letoh
 \ date: 2011/04/04
-
+\ 
+\ run: gforth bf.fs -e bye < helloworld.bf
+\ 
 create iram 1024 allot
 iram value iptr
 0    value imax
@@ -13,7 +15,7 @@ jmp value jptr
 
 \ test end of stream
 : not-finished ( char -- flag )
-	04 <>
+	dup 4 <> swap -1 <> and
 ;
 
 : print ( ch -- )
@@ -88,5 +90,4 @@ jmp value jptr
 \ .( ** load ) imax . .( bytes to iram) cr
 \ ' print from-iram
 ' parse-and-exec from-iram
-bye
-
+\ bye
