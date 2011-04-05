@@ -85,6 +85,7 @@ jmp value jptr
 	repeat 2drop
 ;
 
+dram 1024 0 fill
 \ ' print from-input
 ' load-to-iram from-input
 \ .( ** load ) imax . .( bytes to iram) cr
