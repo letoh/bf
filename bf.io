@@ -22,6 +22,15 @@ BrainFuckVM := Object clone do
 	ip := 0; iram := Sequence clone #setItemType("uint8") setEncoding("number")
 	dp := 0; dram := Sequence clone setSize(1024) #setItemType("uint8") setEncoding("number")
 	jmp := List clone
+	jmpForward := method(
+		level := 1
+		while(0xff != iram at(ip),
+			if(iram at(ip) asCharacter == "[", level = level + 1)
+			if(iram at(ip) asCharacter == "]", level = level - 1)
+			ip = ip + 1
+			if(level == 0, break)
+		)
+	)
 
 	inst_map := Map clone do (
 		atPut(">", method(dp = dp + 1))
@@ -30,7 +39,7 @@ BrainFuckVM := Object clone do
 		atPut("-", method(dram atPut(dp, dram at(dp) - 1)))
 		atPut(".", method(dram at(dp) chr print))
 		atPut(",", method(in := getch; if(in, dram atPut(dp, in at(0)))))
-		atPut("[", method(if(dram at(dp) > 0, jmp push(ip))))
+		atPut("[", method(if(dram at(dp) > 0, jmp push(ip), jmpForward)))
 		atPut("]", method(if(dp >= 0 and dram at(dp) > 0, ip = jmp last, jmp pop)))
 	)
 )
