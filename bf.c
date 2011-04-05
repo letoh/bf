@@ -61,6 +61,25 @@ int vm_fetch(struct bf_vm* vm) { vm->w = *vm->ip++; return !vm_end(vm); }
 void vm_push(struct bf_vm* vm) { if(vm->jp < BR_DEPTH) vm->jmpstack[++vm->jp] = vm->ip; }
 void vm_pop(struct bf_vm* vm)  { if(vm->jp >= 0) --vm->jp; }
 void vm_jmp(struct bf_vm* vm)  { if(vm->jp >= 0) vm->ip = vm->jmpstack[vm->jp]; }
+void vm_skip(struct bf_vm* vm)
+{
+	int level = 1;
+	while(!vm_end(vm))
+	{
+		printf("check ip: %p, '%c', level: %d -> ", vm->ip, *vm->ip, level);
+		switch(*vm->ip++)
+		{
+		case VM_BR:  ++level; break;
+		case VM_BRJ: --level; break;
+		}
+		printf("%d\n", level);
+		if(level == 0)
+		{
+			printf("finish ip: %p, '%c', jp: %d\n", vm->ip, *vm->ip, vm->jp);
+			return;
+		}
+	}
+}
 
 int vm_eval(struct bf_vm* vm)
 {
@@ -71,7 +90,7 @@ int vm_eval(struct bf_vm* vm)
 	case VM_DCD: --*vm->dp; break;
 	case VM_OUT: putchar(*vm->dp); break;
 	case VM_IN:  *vm->dp = getchar(); break;
-	case VM_BR:  if(*vm->dp) vm_push(vm); break;
+	case VM_BR:  if(*vm->dp) vm_push(vm); else vm_skip(vm); break;
 	case VM_BRJ: if(*vm->dp) vm_jmp(vm); else vm_pop(vm); break;
 	default: break; }
 }
