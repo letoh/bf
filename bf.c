@@ -66,16 +66,13 @@ void vm_skip(struct bf_vm* vm)
 	int level = 1;
 	while(!vm_end(vm))
 	{
-		printf("check ip: %p, '%c', level: %d -> ", vm->ip, *vm->ip, level);
 		switch(*vm->ip++)
 		{
 		case VM_BR:  ++level; break;
 		case VM_BRJ: --level; break;
 		}
-		printf("%d\n", level);
 		if(level == 0)
 		{
-			printf("finish ip: %p, '%c', jp: %d\n", vm->ip, *vm->ip, vm->jp);
 			return;
 		}
 	}
