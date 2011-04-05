@@ -38,7 +38,11 @@ jmp value jptr
 ;
 
 : restore-iptr ( -- )
-	jptr 4 - @ to iptr
+	jptr cell - @ to iptr
+;
+
+: drop-ret-addr ( -- )
+	jptr cell - to jptr
 ;
 
 : jump-forward ( -- )
@@ -61,7 +65,7 @@ jmp value jptr
 	[char] . of dptr c@ emit endof
 	[char] , of key dptr c! endof
 	[char] [ of dptr c@ if save-iptr else jump-forward then endof
-	[char] ] of dptr c@ if restore-iptr then endof
+	[char] ] of dptr c@ if restore-iptr else drop-ret-addr then endof
 	endcase
 ;
 
