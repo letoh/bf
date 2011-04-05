@@ -32,6 +32,18 @@ func (vm *bf_vm) dump() {
 		vm.w, vm.ip, vm.iram[vm.ip], vm.dp, vm.dram[vm.dp],
 		vm.jp, j)
 }
+func (vm *bf_vm) forward() {
+	var level = 1
+	for vm.iram[vm.ip] != END {
+		switch {
+		case vm.iram[vm.ip] == '[': level++
+		case vm.iram[vm.ip] == ']': level--
+		}
+		vm.ip++
+		level--
+		if level == 0 { break }
+	}
+}
 func (vm *bf_vm) boot() { vm.ip, vm.dp, vm.jp = 0, 0, -1 }
 func (vm *bf_vm) fetch() bool { vm.w = vm.iram[vm.ip]; vm.ip++; return vm.w != END }
 func (vm *bf_vm) eval() {
@@ -45,7 +57,7 @@ func (vm *bf_vm) eval() {
 	case vm.w == ',':
 		os.Stdin.Read(vm.dram[vm.dp:vm.dp+1])
 	case vm.w == '[':
-		if vm.dram[vm.dp] != 0 { vm.jp++; vm.jmpstack[vm.jp] = vm.ip }
+		if vm.dram[vm.dp] != 0 { vm.jp++; vm.jmpstack[vm.jp] = vm.ip } else { vm.forward() }
 	case vm.w == ']':
 		if vm.dram[vm.dp] != 0 { vm.ip = vm.jmpstack[vm.jp] } else { vm.jp-- }
 	default:
