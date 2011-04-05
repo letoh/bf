@@ -40,7 +40,6 @@ func (vm *bf_vm) forward() {
 		case vm.iram[vm.ip] == ']': level--
 		}
 		vm.ip++
-		level--
 		if level == 0 { break }
 	}
 }
