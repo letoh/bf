@@ -28,7 +28,7 @@ jmp value jptr
 	[char] + of  endof [char] - of  endof
 	[char] . of  endof [char] , of  endof
 	[char] [ of  endof [char] ] of  endof
-	drop drop exit
+	2drop exit
 	endcase
 	iram imax + c!
 	imax 1+ to imax
@@ -74,7 +74,7 @@ jmp value jptr
 : from-input ( xt -- )
 	begin key dup not-finished while
 		over execute
-	repeat drop drop
+	repeat 2drop
 ;
 
 : from-iram ( xt -- )
@@ -82,7 +82,7 @@ jmp value jptr
 	begin dup iptr > while
 		over iptr c@ swap execute
 		iptr 1+ to iptr
-	repeat drop drop
+	repeat 2drop
 ;
 
 \ ' print from-input
