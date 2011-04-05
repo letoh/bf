@@ -64,16 +64,12 @@ void vm_jmp(struct bf_vm* vm)  { if(vm->jp >= 0) vm->ip = vm->jmpstack[vm->jp]; 
 void vm_skip(struct bf_vm* vm)
 {
 	int level = 1;
-	while(!vm_end(vm))
+	while(level && !vm_end(vm))
 	{
 		switch(*vm->ip++)
 		{
 		case VM_BR:  ++level; break;
 		case VM_BRJ: --level; break;
-		}
-		if(level == 0)
-		{
-			return;
 		}
 	}
 }

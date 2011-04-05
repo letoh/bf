@@ -14,11 +14,10 @@ class bf_vm:
 	def __input(vm): vm.dram[vm.dp] = ord(stdin.read(1))
 	def __forward(vm):
 		level = 1
-		while ord(vm.iram[vm.ip]) != END:
+		while level and ord(vm.iram[vm.ip]) != END:
 			if vm.iram[vm.ip] == '[': level += 1
 			elif vm.iram[vm.ip] == ']': level -= 1
 			vm.ip += 1
-			if not level: return
 	def __jmp(vm, target): vm.ip = target
 	def __branch(vm):
 		if vm.dram[vm.dp]: vm.__jmp(vm.jmpstack[-1])
