@@ -39,19 +39,4 @@ $ {
 // end of script
 }
 
-#H
-#${
-#	g
-#	s/\n//g
-#	p
-#}
-#5 constant foo
-#: bar 
-#	begin foo while
-#		foo dup 1- to foo . cr 
-#	repeat
-#;
-
-
-
 
